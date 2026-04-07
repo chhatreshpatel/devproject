@@ -25,7 +25,7 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io
 
       - name: Build Docker Image
-        run: docker build -f .github/Dockerfile -t rsewatka/myapp:${{ github.sha }} .
+        run: docker build -f .github/Dockerfile -t chhatreshpatel/myapp:${{ github.sha }} .
 
       - name: Install Trivy
         run: |
@@ -41,14 +41,14 @@ jobs:
       - name: TRIVY SCAN
         run: |
           docker images | head -n 50
-          docker image inspect rsewatka/myapp:${{ github.sha }}
-          trivy image --severity HIGH,CRITICAL --exit-code 0 rsewatka/myapp:${{ github.sha }}
+          docker image inspect chhatreshpatel/myapp:${{ github.sha }}
+          trivy image --severity HIGH,CRITICAL --exit-code 0 chhatreshpatel/myapp:${{ github.sha }}
 
       - name: Login to DockerHub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Push Docker Image
-        run: docker push rsewatka/myapp:${{ github.sha }}
+        run: docker push chhatreshpatel/myapp:${{ github.sha }}
 
       - name: Slack notify (DEV)
         if: always()
@@ -102,4 +102,3 @@ jobs:
             {
               "text": "*PROD* deploy finished with status: *${{ job.status }}*\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref_name }}\nCommit: ${{ github.sha }}\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             }
-
